@@ -2,20 +2,23 @@
 using PENet;
 public class ServerSession : PESession<GameMsg>
 {
+    public int SessionID = 0;
+
     protected override void OnConnected()
     {
-        PECommon.Log("Client Connect");
-
+        SessionID = ServerRoot.Instance.GetSessionID();
+        PECommon.Log("SessionID"+SessionID+"Client Connect");
     }
 
     protected override void OnReciveMsg(GameMsg msg)
     {
-        PECommon.Log("RcvPack CMD:"+ ((CMD)msg.cmd).ToString());
+        PECommon.Log("SessionID" + SessionID + "RcvPack CMD:" + ((CMD)msg.cmd).ToString());
         Netsvc.Instance.AddMsgQue(new MsgPack(this,msg));
     }
 
     protected override void OnDisConnected()
     {
-        PECommon.Log("Client Disconnect");
+        LoginSys.Instance.ClearOffline(this);
+        PECommon.Log("SessionID" + SessionID + "Client Disconnect");
     }
 }

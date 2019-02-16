@@ -49,5 +49,45 @@ public class CacheSvc
         onLineAcctDic.Add(acct, session);
         onLineSessionDic.Add(session, playerData);
     }
+
+
+    public bool IsNameExist(string name)
+    {
+        return DBMgr.Instance.QueryNameData(name);
+    }
+
+    public PlayerData GetPlayerDataBySession(ServerSession session)
+    {
+        if (onLineSessionDic.TryGetValue(session, out PlayerData playerData))
+        {
+            return playerData;
+        }
+
+        else
+        {
+            return null;
+        }
+
+    }
+
+    public bool UpdatePlayerData(int id ,PlayerData playerData)
+    {
+        //没有更新缓存
+        return DBMgr.Instance.UpdatePlayerData(id,playerData);
+    }
+
+    public void AcctOffline(ServerSession session)
+    {
+        foreach (var item in onLineAcctDic)
+        {
+            if (item.Value == session)
+            {
+                onLineAcctDic.Remove(item.Key);
+            }
+        }
+
+        bool ret = onLineSessionDic.Remove(session);
+        PECommon.Log("Offline Result:" + ret + "SessionID:" + session.SessionID);
+    }
 }
 

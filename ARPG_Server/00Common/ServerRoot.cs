@@ -20,7 +20,7 @@ public class ServerRoot
     public void Init()
     {
         //数据层 
-
+        DBMgr.Instance.Init();
         //服务层
         Netsvc.Instance.Init();
         CacheSvc.Instance.Init();
@@ -32,6 +32,16 @@ public class ServerRoot
     public void Update()
     {
         Netsvc.Instance.Update();
+    }
+
+    private int SessionID = 0;
+    public int GetSessionID()
+    {
+        if (SessionID == int.MaxValue)
+        {
+            SessionID = 0;
+        }
+        return SessionID+=1;
     }
 }
 

@@ -2,8 +2,8 @@ G:\VS Projects\ARPG_Server\PEProtocol\bin\Debug\PEProtocol.dll
 G:\VS Projects\ARPG_Server\PEProtocol\bin\Debug\PEProtocol.pdb
 G:\VS Projects\ARPG_Server\PEProtocol\bin\Debug\PESocket.dll
 G:\VS Projects\ARPG_Server\PEProtocol\bin\Debug\PESocket.pdb
-G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.csprojAssemblyReference.cache
 G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.csproj.CoreCompileInputs.cache
 G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.csproj.CopyComplete
 G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.dll
 G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.pdb
+G:\VS Projects\ARPG_Server\PEProtocol\obj\Debug\PEProtocol.csprojAssemblyReference.cache
