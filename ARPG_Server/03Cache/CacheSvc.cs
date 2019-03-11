@@ -50,6 +50,15 @@ public class CacheSvc
         onLineSessionDic.Add(session, playerData);
     }
 
+    public List<ServerSession> GetOnlineServerSession()
+    {
+        List<ServerSession> list = new List<ServerSession>();
+        foreach (var item in onLineSessionDic)
+        {
+            list.Add(item.Key);
+        }
+        return list;
+    }
 
     public bool IsNameExist(string name)
     {
@@ -70,10 +79,15 @@ public class CacheSvc
 
     }
 
-    public bool UpdatePlayerData(int id ,PlayerData playerData)
+    public bool UpdatePlayerData(int id ,PlayerData playerData,ServerSession session)
     {
-        //没有更新缓存
-        return DBMgr.Instance.UpdatePlayerData(id,playerData);
+        if (DBMgr.Instance.UpdatePlayerData(id, playerData))
+        {
+            //没有更新缓存
+            onLineSessionDic[session] = playerData;
+            return true;
+        }
+        return false;
     }
 
     public void AcctOffline(ServerSession session)

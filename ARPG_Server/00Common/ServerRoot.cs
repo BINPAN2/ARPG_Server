@@ -22,11 +22,14 @@ public class ServerRoot
         //数据层 
         DBMgr.Instance.Init();
         //服务层
+        CfgSvc.Instance.Init();
         Netsvc.Instance.Init();
         CacheSvc.Instance.Init();
 
-        //业务系统曾
+        //业务系统层
         LoginSys.Instance.Init();
+        GuideSys.Instance.Init();
+        ChatSys.Instance.Init();
     }
 
     public void Update()

@@ -76,6 +76,15 @@ public class Netsvc
             case CMD.ReqRename:
                 LoginSys.Instance.ReqRename(pack);
                 break;
+            case CMD.ReqGuide:
+                GuideSys.Instance.ReqGuide(pack);
+                break;
+            case CMD.ReqStrong:
+                StrongSys.Instance.ReqStrong(pack);
+                break;
+            case CMD.SndChat:
+                ChatSys.Instance.SndChat(pack);
+                break;
         }
     }
 }

@@ -85,7 +85,7 @@ public class LoginSys
             PlayerData playerData = CacheSvc.Instance.GetPlayerDataBySession(pack.session);
             playerData.name = data.name;
 
-            if (!CacheSvc.Instance.UpdatePlayerData(playerData.id,playerData))
+            if (!CacheSvc.Instance.UpdatePlayerData(playerData.id,playerData,pack.session))
             {
                 msg.err = (int)ErrorCode.UpdateDBError;
             }
