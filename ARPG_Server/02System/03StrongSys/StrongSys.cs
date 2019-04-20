@@ -59,6 +59,8 @@ public class StrongSys
             pd.ap += nextsd.addhurt;
             pd.addef += nextsd.adddef;
             pd.apdef += nextsd.adddef;
+            //更新任务进度数据
+            TaskSys.Instance.CalcTaskPrgs(pd, 3);
 
             if (!CacheSvc.Instance.UpdatePlayerData(pd.id,pd,pack.session))
             {
@@ -77,6 +79,7 @@ public class StrongSys
                     apdef = pd.apdef,
                     strongArr = pd.strongArr
                 };
+
             }
 
         }

@@ -47,5 +47,7 @@ public class ChatSys
         {
             list[i].SendMsg(bytes);
         }
+
+        TaskSys.Instance.CalcTaskPrgs(pd, 6);//更新任务进度数据
     }
 }

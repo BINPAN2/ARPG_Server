@@ -21,7 +21,7 @@ public class CacheSvc
 
     private Dictionary<string, ServerSession> onLineAcctDic = new Dictionary<string, ServerSession>();
     private Dictionary<ServerSession, PlayerData> onLineSessionDic = new Dictionary<ServerSession, PlayerData>();
-
+    private static readonly string lockonLineSessionDic = "lockonLineSessionDic";
     public void Init()
     {
         PECommon.Log("CacheSvc Init Done.");
@@ -97,11 +97,32 @@ public class CacheSvc
             if (item.Value == session)
             {
                 onLineAcctDic.Remove(item.Key);
+                break;
             }
         }
 
         bool ret = onLineSessionDic.Remove(session);
         PECommon.Log("Offline Result:" + ret + "SessionID:" + session.SessionID);
+    }
+
+    public Dictionary<ServerSession,PlayerData> GetOnlineCache()
+    {
+        return onLineSessionDic;
+    }
+
+    public ServerSession GetServerSessionByID(int id)
+    {
+        ServerSession session = null;
+        foreach (var item in onLineSessionDic)
+        {
+            if (item.Value.id == id)
+            {
+                session = item.Key;
+                break;
+            }
+        }
+
+        return session;
     }
 }
 

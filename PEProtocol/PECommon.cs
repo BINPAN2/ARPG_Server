@@ -34,5 +34,33 @@ public class PECommon
     {
         return 100 * lv * lv;
     }
+
+    public const int PowerAddSpace = 5;//体力增加间隔 分钟
+    public const int PowerAddCount = 2;
+
+    public static void CalcExp(PlayerData pd, int addExp)
+    {
+        int curLv = pd.lv;
+        int curExp = pd.exp;
+        int addRestExp = addExp;
+        while (true)
+        {
+            int upNeedExp = PECommon.GetExpUpValByLv(curLv) - curExp;
+            if (addRestExp >= upNeedExp)
+            {
+                curLv++;
+                curExp = 0;
+                addRestExp -= upNeedExp;
+            }
+            else
+            {
+                pd.lv = curLv;
+                pd.exp = curExp + addRestExp;
+                break;
+            }
+        }
+    }
+
+
 }
 

@@ -1,7 +1,8 @@
-﻿/// <summary>
+﻿
+using System.Threading;
+/// <summary>
 /// 启动服务器
 /// </summary>
-
 public class ServerStart
 {
     static void  Main(string[] args)
@@ -11,6 +12,7 @@ public class ServerStart
         while (true)
         {
             ServerRoot.Instance.Update();
+            Thread.Sleep(20);
         }
     }
 }

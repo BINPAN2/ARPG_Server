@@ -24,6 +24,8 @@ public class CfgSvc
     {
         InitAutoGuideCfg();
         InitStrongCfg();
+        InitTaskRewardCfg();
+        InitMapCfg();
         PECommon.Log("CfgSvc Init Done.");
     }
 
@@ -167,6 +169,113 @@ public class CfgSvc
 
     #endregion
 
+
+    #region TaskRewardCfg
+
+    private Dictionary<int, TaskRewardCfg> taskRewardCfgDic = new Dictionary<int, TaskRewardCfg>();
+
+    public void InitTaskRewardCfg()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(@"G:\Unity Projects\ARPG\Assets\Resources\ResCfgs\taskreward.xml");
+
+        XmlNodeList nodeList = doc.SelectSingleNode("root").ChildNodes;
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            XmlElement ele = nodeList[i] as XmlElement;
+            if (ele.GetAttributeNode("ID") == null)
+            {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttributeNode("ID").InnerText);
+            TaskRewardCfg taskRewardCfg = new TaskRewardCfg
+            {
+                ID = ID,
+            };
+            foreach (XmlElement item in ele.ChildNodes)
+            {
+                switch (item.Name)
+                {
+                    case "count":
+                        taskRewardCfg.count = int.Parse(item.InnerText);
+                        break;
+                    case "coin":
+                        taskRewardCfg.coin = int.Parse(item.InnerText);
+                        break;
+                    case "exp":
+                        taskRewardCfg.exp = int.Parse(item.InnerText);
+                        break;
+                }
+            }
+            taskRewardCfgDic.Add(ID, taskRewardCfg);
+        }
+        PECommon.Log("TaskRewardCfg Init Done");
+    }
+
+    public TaskRewardCfg GetTaskRewardCfg(int ID)
+    {
+        TaskRewardCfg taskRewardCfg = null;
+        if (taskRewardCfgDic.TryGetValue(ID, out taskRewardCfg))
+        {
+            return taskRewardCfg;
+        }
+        return null;
+    }
+
+
+
+    #endregion
+
+    #region MapCfg
+
+    private Dictionary<int, MapCfg> mapCfgDic = new Dictionary<int, MapCfg>();
+
+    public void InitMapCfg()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(@"G:\Unity Projects\ARPG\Assets\Resources\ResCfgs\map.xml");
+
+        XmlNodeList nodeList = doc.SelectSingleNode("root").ChildNodes;
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            XmlElement ele = nodeList[i] as XmlElement;
+            if (ele.GetAttributeNode("ID") == null)
+            {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttributeNode("ID").InnerText);
+            MapCfg mapCfg = new MapCfg
+            {
+                ID = ID,
+            };
+            foreach (XmlElement item in ele.ChildNodes)
+            {
+                switch (item.Name)
+                {
+                    case "power":
+                        mapCfg.power = int.Parse(item.InnerText);
+                        break;
+                }
+            }
+            mapCfgDic.Add(ID, mapCfg);
+        }
+        PECommon.Log("MapCfg Init Done");
+    }
+
+    public MapCfg GetMapCfg(int ID)
+    {
+        MapCfg mapCfg = null;
+        if (mapCfgDic.TryGetValue(ID, out mapCfg))
+        {
+            return mapCfg;
+        }
+        return null;
+    }
+
+
+
+    #endregion
+
 }
 public class BaseData<T>
 {
@@ -190,4 +299,22 @@ public class StrongCfg : BaseData<StrongCfg>
     public int minlv;
     public int coin;
     public int crystal;
+}
+
+public class TaskRewardCfg : BaseData<TaskRewardCfg>
+{
+    public int count;
+    public int exp;
+    public int coin;
+}
+
+public class TaskRewardData : BaseData<TaskRewardData>
+{
+    public int prgs;
+    public bool taked;
+}
+
+public class MapCfg: BaseData<MapCfg>
+{
+    public int power;
 }

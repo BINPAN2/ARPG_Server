@@ -47,12 +47,30 @@ public class LoginSys
             }
             else
             {
+                int power = pd.power;
+                long nowtime = TimeSvc.Instance.GetNowTime();
+                long deltatime = nowtime - pd.time;
+                int addPower = (int)(deltatime / (1000 * 60 * PECommon.PowerAddSpace)) * PECommon.PowerAddCount;
+                if (addPower > 0)
+                {
+                    int powerMax = PECommon.GetPowerLimit(pd.lv);
+                    if (pd.power < powerMax)
+                    {
+                        pd.power += addPower;
+                        if (pd.power > powerMax)
+                        {
+                            pd.power = powerMax;
+                        }
+                    }
+                }
+
                 msg.rspLogin = new RspLogin
                 {
                     playerData = pd
                 };
 
                 CacheSvc.Instance.AcctOnline(data.acct, pack.session, pd);
+                CacheSvc.Instance.UpdatePlayerData(pd.id, pd, pack.session);
             }
 
 
@@ -77,7 +95,7 @@ public class LoginSys
         {
             //名字是否已经存在
             //存在：返回错误码
-            msg.err =(int) ErrorCode.NameIsExist;
+            msg.err = (int)ErrorCode.NameIsExist;
         }
         else
         {
@@ -85,7 +103,7 @@ public class LoginSys
             PlayerData playerData = CacheSvc.Instance.GetPlayerDataBySession(pack.session);
             playerData.name = data.name;
 
-            if (!CacheSvc.Instance.UpdatePlayerData(playerData.id,playerData,pack.session))
+            if (!CacheSvc.Instance.UpdatePlayerData(playerData.id, playerData, pack.session))
             {
                 msg.err = (int)ErrorCode.UpdateDBError;
             }
@@ -103,7 +121,16 @@ public class LoginSys
 
     public void ClearOffline(ServerSession session)
     {
-        CacheSvc.Instance.AcctOffline(session);
+        PlayerData pd = CacheSvc.Instance.GetPlayerDataBySession(session);
+        if (pd != null)
+        {
+            pd.time = TimeSvc.Instance.GetNowTime();
+            if (!CacheSvc.Instance.UpdatePlayerData(pd.id, pd, session))
+            {
+                PECommon.Log("Update offline time Error");
+            }
+            CacheSvc.Instance.AcctOffline(session);
+        }
     }
 }
 

@@ -85,6 +85,15 @@ public class Netsvc
             case CMD.SndChat:
                 ChatSys.Instance.SndChat(pack);
                 break;
+            case CMD.ReqBuy:
+                BuySys.Instance.ReqBuy(pack);
+                break;
+            case CMD.ReqTakeTaskReward:
+                TaskSys.Instance.ReqTakeTaskReward(pack);
+                break;
+            case CMD.ReqFBFight:
+                MissionSys.Instance.ReqFBFight(pack);
+                break;
         }
     }
 }

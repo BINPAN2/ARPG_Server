@@ -19,6 +19,19 @@ namespace PEProtocol
 
         public SndChat sndChat;
         public PshChat pshChat;
+
+        public ReqBuy reqBuy;
+        public RspBuy rspBuy;
+
+        public PshPower pshPower;
+
+        public ReqTakeTaskReward reqTakeTaskReward;
+        public RspTakeTaskReward rspTakeTaskReward;
+
+        public PshTaskPrgs pshTaskPrgs;
+
+        public ReqFBFight reqFBFight;
+        public RspFBFight rspFBFight;
     }
 
     #region Login
@@ -58,6 +71,9 @@ namespace PEProtocol
 
         public int guideID;
         public int[] strongArr;//索引号代表位置，值代表星级
+        public long time;
+        public string[] taskArr;
+        public int mission;
     } 
 
     [Serializable]
@@ -127,6 +143,70 @@ namespace PEProtocol
     }
     #endregion
 
+    #region Power
+    [Serializable]
+    public class PshPower
+    {
+        public int power;
+    }
+
+    #endregion
+
+    #region Buy
+    [Serializable]
+    public class ReqBuy
+    {
+        public int buyType;
+        public int cost;
+    }
+
+    [Serializable]
+    public class RspBuy
+    {
+        public int buyType;
+        public int diamond;
+        public int coin;
+        public int power;
+    }
+    #endregion
+
+    #region TaskReward
+    [Serializable]
+    public class ReqTakeTaskReward
+    {
+        public int rid;
+    }
+    [Serializable]
+    public class RspTakeTaskReward
+    {
+        public int coin;
+        public int lv;
+        public int exp;
+        public string[] taskArr;
+    }
+    [Serializable]
+    public class PshTaskPrgs
+    {
+        public string[] taskArr;
+    }
+
+    #endregion
+
+    #region Fight
+    [Serializable]
+    public class ReqFBFight
+    {
+        public int fbid;
+    }
+
+    [Serializable]
+    public class RspFBFight
+    {
+        public int fbid;
+        public int power;
+    }
+    #endregion
+
     public enum ErrorCode
     {
         None = 0,
@@ -135,11 +215,13 @@ namespace PEProtocol
         WrongPass,//密码错误
         NameIsExist,//名字已经存在
         UpdateDBError,//更新数据库错误
-
+        ClientDataError,//客户端数据异常
 
         LackLevel,//等级不够
         LackCoin,//缺少金币
         LackCrystal,//缺少水晶
+        LackDiamond,//缺少钻石
+        LackPower,//体力不足
     }
 
     public enum CMD
@@ -161,6 +243,24 @@ namespace PEProtocol
         //聊天
         SndChat = 205,
         PshChat = 206,
+
+        //购买
+        ReqBuy = 207,
+        RspBuy = 208,
+
+        //推送体力
+        PshPower = 209,
+
+        //领取任务奖励
+        ReqTakeTaskReward = 210,
+        RspTakeTaskReward = 211,
+
+        //推送任务进度
+        PshTaskPrgs = 212,
+
+        //战斗
+        ReqFBFight =301,
+        RspFBFight = 302,
     }
 
     public class IPCfg

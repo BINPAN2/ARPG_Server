@@ -41,10 +41,17 @@ public class GuideSys
         //更新引导任务ID
         if (pd.guideID == data.guideID)
         {
+            //检测是否为智者点播任务
+            if (pd.guideID == 1001)
+            {
+                //推送任务完成，更新任务进度
+                TaskSys.Instance.CalcTaskPrgs(pd, 1);
+            }
             pd.guideID += 1;
             //更新玩家数据
             pd.coin += gc.coin;
-            CalcExp(pd, gc.exp);
+            PECommon.CalcExp(pd, gc.exp);
+
             if (!CacheSvc.Instance.UpdatePlayerData(pd.id,pd,pack.session))
             {
                 msg.err = (int)ErrorCode.UpdateDBError;
@@ -69,27 +76,5 @@ public class GuideSys
         pack.session.SendMsg(msg);
     }
 
-    private void CalcExp(PlayerData pd ,int addExp)
-    {
-        int curLv = pd.lv;
-        int curExp = pd.exp;
-        int addRestExp = addExp;
-        while (true)
-        {
-            int upNeedExp = PECommon.GetExpUpValByLv(curLv)-curExp;
-            if (addRestExp>=upNeedExp)
-            {
-                curLv++;
-                curExp = 0;
-                addRestExp -= upNeedExp;
-            }
-            else
-            {
-                pd.lv = curLv;
-                pd.exp = curExp+ addRestExp;
-                break;
-            }
-        }
-    }
 }
 

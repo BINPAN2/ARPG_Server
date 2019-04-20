@@ -69,7 +69,8 @@ public class DBMgr
                         critical = reader.GetInt32("critical"),
 
                         guideID = reader.GetInt32("guideID"),
-
+                        time = reader.GetInt64("time"),
+                        mission = reader.GetInt32("mission"),
                         //TOADD
                     };
                     #region Strong
@@ -90,8 +91,32 @@ public class DBMgr
                             PECommon.Log("Parse Strong Data Error", LogType.Error);
                         }
                     }
-                    playerData.strongArr = _strongArr; 
+                    playerData.strongArr = _strongArr;
                     #endregion
+
+                    #region TaskReward
+
+                    //数据示意：1|0|0#2|0|0#3|0|0#4|0|0#5|0|0#6|0|0# （任务ID|任务Count|是否领取）
+                    string[] taskArr = reader.GetString("task").Split('#');
+                    playerData.taskArr = new string[6];
+                    for (int i = 0; i < taskArr.Length; i++)
+                    {
+                        if (taskArr[i]=="")
+                        {
+                            continue;
+                        }
+                        else if (taskArr[i].Length >= 5)
+                        {
+                            playerData.taskArr[i] = taskArr[i];
+                        }
+                        else
+                        {
+                            throw new Exception("DataError");
+                        }
+                    }
+                    #endregion
+
+
                     //TODO
                 }
             }
@@ -132,8 +157,19 @@ public class DBMgr
                     critical = 2,
                     guideID = 1001,
                     strongArr = new int[6],
+                    time = TimeSvc.Instance.GetNowTime(),
+                    taskArr = new string[6],
+                    mission = 10001,
                     //TOADD
                 };
+
+                //数据示意：1|0|0#2|0|0#3|0|0#4|0|0#5|0|0#6|0|0# （任务ID|任务Count|是否领取）
+                //初始化任务奖励数据
+                for (int i = 0; i < playerData.taskArr.Length; i++)
+                {
+                    playerData.taskArr[i] = (i + 1) + "|0|0";
+                }
+
                 playerData.id = InserNewAcctData(acct, pass, playerData);
             }
 
@@ -150,7 +186,7 @@ public class DBMgr
         try
         {
             MySqlCommand cmd = new MySqlCommand("insert into account set acct = @acct,pass = @pass,name = @name,level = @level,exp = @exp,power = @power,coin =@coin,diamond = @diamond,crystal=@crystal,"
-                + "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideID=@guideID,strong=@strong", conn);
+                + "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideID=@guideID,strong=@strong,time=@time,task=@task,mission=@mission", conn);
             cmd.Parameters.AddWithValue("acct", acct);
             cmd.Parameters.AddWithValue("pass", pass);
             cmd.Parameters.AddWithValue("name", pd.name);
@@ -179,6 +215,18 @@ public class DBMgr
                 strongInfo += "#";
             }
             cmd.Parameters.AddWithValue("strong", strongInfo);
+            cmd.Parameters.AddWithValue("time", pd.time);
+            string taskInfo = "";
+            for (int i = 0; i <pd.taskArr.Length ; i++)
+            {
+                taskInfo += pd.taskArr[i];
+                taskInfo += "#";
+            }
+            cmd.Parameters.AddWithValue("task", taskInfo);
+            cmd.Parameters.AddWithValue("mission", pd.mission);
+
+
+
             cmd.ExecuteNonQuery();
             id = (int)cmd.LastInsertedId;
         }
@@ -225,7 +273,7 @@ public class DBMgr
     {
         try
         {
-            MySqlCommand cmd = new MySqlCommand("update  account set name = @name,level = @level,exp = @exp,power = @power,coin =@coin,diamond = @diamond ,crystal = @crystal,hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideID=@guideID,strong=@strong where id = @id", conn);
+            MySqlCommand cmd = new MySqlCommand("update  account set name = @name,level = @level,exp = @exp,power = @power,coin =@coin,diamond = @diamond ,crystal = @crystal,hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideID=@guideID,strong=@strong,time=@time,task=@task,mission=@mission where id = @id", conn);
             cmd.Parameters.AddWithValue("id", id);
             cmd.Parameters.AddWithValue("name", pd.name);
             cmd.Parameters.AddWithValue("level", pd.lv);
@@ -253,6 +301,16 @@ public class DBMgr
                 strongInfo += "#";
             }
             cmd.Parameters.AddWithValue("strong", strongInfo);
+            cmd.Parameters.AddWithValue("time", pd.time);
+
+            string taskInfo = "";
+            for (int i = 0; i < pd.taskArr.Length; i++)
+            {
+                taskInfo += pd.taskArr[i];
+                taskInfo += "#";
+            }
+            cmd.Parameters.AddWithValue("task", taskInfo);
+            cmd.Parameters.AddWithValue("mission", pd.mission);
 
             cmd.ExecuteNonQuery();
 
