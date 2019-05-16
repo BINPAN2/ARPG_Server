@@ -296,7 +296,7 @@ namespace PEProtocol
 
     public class IPCfg
     {
-        public const string srvIP = "127.0.0.1";
+        public const string srvIP = "10.0.0.4";
         public const int srvPort = 17666;
     }
 }
