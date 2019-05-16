@@ -32,6 +32,9 @@ namespace PEProtocol
 
         public ReqFBFight reqFBFight;
         public RspFBFight rspFBFight;
+
+        public ReqFBFightEnd reqFBFightEnd;
+        public RspFBFightEnd rspFBFightEnd;
     }
 
     #region Login
@@ -205,6 +208,31 @@ namespace PEProtocol
         public int fbid;
         public int power;
     }
+
+    [Serializable]
+    public class ReqFBFightEnd
+    {
+        public bool iswin;
+        public int fbid;
+        public int resthp;
+        public int costtime;
+    }
+
+    [Serializable]
+    public class RspFBFightEnd
+    {
+        public bool iswin;
+        public int fbid;
+        public int resthp;
+        public int costtime;
+
+        //副本奖励
+        public int coin;
+        public int lv;
+        public int exp;
+        public int crystal;
+        public int fuben;
+    }
     #endregion
 
     public enum ErrorCode
@@ -261,6 +289,9 @@ namespace PEProtocol
         //战斗
         ReqFBFight =301,
         RspFBFight = 302,
+
+        ReqFBFightEnd = 303,
+        RspFBFightEnd = 304,
     }
 
     public class IPCfg

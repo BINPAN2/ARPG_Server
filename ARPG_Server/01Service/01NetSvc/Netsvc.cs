@@ -94,6 +94,9 @@ public class Netsvc
             case CMD.ReqFBFight:
                 MissionSys.Instance.ReqFBFight(pack);
                 break;
+            case CMD.ReqFBFightEnd:
+                MissionSys.Instance.ReqFBFightEnd(pack);
+                break;
         }
     }
 }

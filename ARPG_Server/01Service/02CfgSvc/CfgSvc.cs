@@ -255,6 +255,15 @@ public class CfgSvc
                     case "power":
                         mapCfg.power = int.Parse(item.InnerText);
                         break;
+                    case "exp":
+                        mapCfg.exp = int.Parse(item.InnerText);
+                        break;
+                    case "coin":
+                        mapCfg.coin = int.Parse(item.InnerText);
+                        break;
+                    case "crystal":
+                        mapCfg.crystal = int.Parse(item.InnerText);
+                        break;
                 }
             }
             mapCfgDic.Add(ID, mapCfg);
@@ -317,4 +326,7 @@ public class TaskRewardData : BaseData<TaskRewardData>
 public class MapCfg: BaseData<MapCfg>
 {
     public int power;
+    public int exp;
+    public int coin;
+    public int crystal;
 }
